@@ -8,11 +8,11 @@ class NobitexExchange(Exchange):
 
     def __init__(self) -> None:
         super().__init__(name='nobitex', base_url='https://api.nobitex.ir')
-        self.currencies = [
+        self.src_currencies = [
             'btc', 'ltc', 'bnb', 'eth', 'etc', 'doge',
             'xlm', 'bch', 'xrp', 'trx', 'eos'
         ]
-        self.token = ''
+        self.dst_currencies = ['usdt', 'rls']
         if not self.token:
             self.token = self.login(username="mohammad.rafiei69@gmail.com", password="ZEmX7WHZxdVmmfY")
         self.headers = {"Authorization": f"Token {self.token}", "content-type": "application/json"}
@@ -55,7 +55,7 @@ class NobitexExchange(Exchange):
         return user_wallets
 
     def get_current_prices(self, dst_currency: str='rls'):
-        srcCurrency = ','.join(self.currencies)
+        srcCurrency = ','.join(self.src_currencies)
         data = {
             "srcCurrency": srcCurrency,
             "dstCurrency": dst_currency

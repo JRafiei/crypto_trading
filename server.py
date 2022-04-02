@@ -1,5 +1,6 @@
-from flask import Flask, redirect, render_template, request, session
+from flask import Flask, redirect, render_template, request, session, url_for
 from pymongo import MongoClient
+from forms import OrderForm
 from nobitexexchange import NobitexExchange
 from order import Notification, Order
 
@@ -20,22 +21,25 @@ def get_wallets():
 
 @app.route('/add-order', methods=["GET", "POST"])
 def add_order():
-    if request.method == "GET":
-        result = session.pop('add-order-result', None)
-        return render_template('add_order.html', result=result)
-    else:
+    form = OrderForm()
+    form.src_currency.choices = [(c, c.upper()) for c in exchange.src_currencies]
+    form.dst_currency.choices = [(c, c.upper()) for c in exchange.dst_currencies]
+    if form.validate_on_submit():
         order = Order(
-            type=request.form.get('order_type'),
-            amount=request.form.get('amount', type=float),
-            price=request.form.get('price', type=float),
-            condition=request.form.get('condition', ''),
-            src_currency=request.form.get('src_currency'),
-            dst_currency=request.form.get('dst_currency'),
+            type=form.data.get('order_type'),
+            amount=form.data.get('amount'),
+            price=form.data.get('price'),
+            condition=form.data.get('condition'),
+            src_currency=form.data.get('src_currency'),
+            dst_currency=form.data.get('dst_currency'),
         )
         db.orders.insert_one(order.to_dict())
         session['add-order-result'] = 'success'
         # result = exchange.add_order(order)
-        return redirect('/add-order')
+        return redirect(url_for('add_order'))
+
+    result = session.pop('add-order-result', None)
+    return render_template('add_order.html', form=form, result=result)
 
 
 @app.route('/add-notification', methods=["GET", "POST"])

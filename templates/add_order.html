@@ -25,44 +25,82 @@
           {% endif %}
 
           <h1>Add Order</h1>
-          <form method="POST" action="/add-order">
+          <form method="POST" action="{{ url_for('add_order') }}">
+            {{ form.csrf_token }}
             <div class="mb-3">
-              <label class="form-label">Order type: </label>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="order_type" id="order-sell" value="sell">
-                <label class="form-check-label" for="order-sell">Sell</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="order_type" id="order-buy" value="buy">
-                <label class="form-check-label" for="order-buy">Buy</label>
-              </div>
+              {{ form.order_type.label }}:&nbsp;
+              <!-- **{{ form.order_type.name }}** -->
+              <!-- {{ form.order_type }} -->
+              {% for choice in form.order_type.choices %}
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="{{ form.order_type.name }}" id="{{form.order_type.name}}-{{loop.index}}" value="{{ choice.0 }}">
+                  <label class="form-check-label" for="order-sell">{{ choice.1 }}</label>
+                </div>
+              {% endfor %}
+              {% if form.order_type.errors %}
+                <div class="errors">
+                  {% for error in form.order_type.errors %}
+                    <p class="text-danger">{{ error }}</p>
+                  {% endfor %}
+                </div>
+              {% endif %}
             </div>
             <div class="mb-3">
-              <label for="condition" class="form-label">Condition</label>
-              <select class="form-select" name="condition" id="condition">
-                <option selected value="up">Crossing Up</option>
-                <option value="down">Crossing Down</option>
-              </select>
+              {{ form.condition.label(class_="form-label") }}
+              {{ form.condition(class_="form-select") }}
+              {% if form.condition.errors %}
+                <div class="errors">
+                  {% for error in form.condition.errors %}
+                    <p class="text-danger">{{ error }}</p>
+                  {% endfor %}
+                </div>
+              {% endif %}
             </div>
             <div class="mb-3">
-              <label for="order-amount" class="form-label">Amount</label>
-              <input type="number" class="form-control" name="amount" id="order-amount" step="any">
+              {{ form.amount.label(class_="form-label") }}
+              {{ form.amount(class_="form-control") }}
+              {% if form.amount.errors %}
+                <div class="errors">
+                  {% for error in form.amount.errors %}
+                    <p class="text-danger">{{ error }}</p>
+                  {% endfor %}
+                </div>
+              {% endif %}
             </div>
             <div class="mb-3">
-              <label for="order-price" class="form-label">Price</label>
-              <input type="number" class="form-control" name="price" id="order-price" step="any">
+              {{ form.price.label(class_="form-label") }}
+              {{ form.price(class_="form-control") }}
+              {% if form.price.errors %}
+                <div class="errors">
+                  {% for error in form.price.errors %}
+                    <p class="text-danger">{{ error }}</p>
+                  {% endfor %}
+                </div>
+              {% endif %}
             </div>
             <div class="mb-3">
-              <label for="src-currency" class="form-label">Source Currency</label>
-              <input type="text" class="form-control" name="src_currency" id="src-currency">
-              <div id="src-currency-help" class="form-text">The Source Currency</div>
+              {{ form.src_currency.label(class_="form-label") }}
+              {{ form.src_currency(class_="form-select") }}
+              {% if form.src_currency.errors %}
+                <div class="errors">
+                  {% for error in form.src_currency.errors %}
+                    <p class="text-danger">{{ error }}</p>
+                  {% endfor %}
+                </div>
+              {% endif %}
             </div>
             <div class="mb-3">
-              <label for="dst-currency" class="form-label">Target Currency</label>
-              <input type="text" class="form-control" name="dst_currency" id="dst-currency" placeholder="usdt">
-              <div id="dst-currency-help" class="form-text">The Traget Currency</div>
+              {{ form.dst_currency.label(class_="form-label") }}
+              {{ form.dst_currency(class_="form-select") }}
+              {% if form.dst_currency.errors %}
+                <div class="errors">
+                  {% for error in form.dst_currency.errors %}
+                    <p class="text-danger">{{ error }}</p>
+                  {% endfor %}
+                </div>
+              {% endif %}
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            {{ form.submit(class_="btn btn-primary") }}
           </form>
         </div>
       </div>

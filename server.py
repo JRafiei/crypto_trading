@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Flask, redirect, render_template, request, session, url_for
 from pymongo import MongoClient
 from forms import OrderForm
@@ -30,6 +31,7 @@ def add_order():
             amount=form.data.get('amount'),
             price=form.data.get('price'),
             condition=form.data.get('condition'),
+            created_at=datetime.now(),
             src_currency=form.data.get('src_currency'),
             dst_currency=form.data.get('dst_currency'),
         )

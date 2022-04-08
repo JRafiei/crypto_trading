@@ -1,14 +1,19 @@
 from dataclasses import dataclass
+from datetime import datetime
+from bson import ObjectId
 
 
 @dataclass
 class Order:
+    _id: ObjectId
     type: str
     amount: float
     price: float
     condition: str
+    created_at: datetime
     src_currency: str
     dst_currency: str = "usdt"
+    status: str = "pending"
 
     def to_dict(self):
         return {
@@ -16,6 +21,8 @@ class Order:
             "amount": self.amount,
             "price": self.price,
             "condition": self.condition,
+            "status": self.status,
+            "created_at": self.created_at,
             "src_currency": self.src_currency,
             "dst_currency": self.dst_currency,
         }

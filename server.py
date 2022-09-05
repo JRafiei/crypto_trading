@@ -1,3 +1,4 @@
+import os
 from datetime import datetime
 from flask import Flask, redirect, render_template, request, session, url_for
 from pymongo import MongoClient
@@ -7,8 +8,8 @@ from order import Notification, Order
 
 
 app = Flask(__name__)
-app.secret_key = b'_5#y3L"F2Q8z\n\xec]/'
-client = MongoClient('localhost', 27017)
+app.secret_key = os.environ.get('SECRET_KEY').encode()
+client = MongoClient(os.environ.get('MONGO_URL'))
 db = client.crypto_db
 
 exchange = NobitexExchange()

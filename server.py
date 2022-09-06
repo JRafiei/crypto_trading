@@ -4,7 +4,7 @@ from flask import Flask, redirect, render_template, request, session, url_for
 from pymongo import MongoClient
 from forms import OrderForm
 from nobitexexchange import NobitexExchange
-from order import Notification, Order
+from models import Notification, Order
 
 
 app = Flask(__name__)

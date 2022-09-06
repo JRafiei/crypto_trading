@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Dict
-from order import Order
+from models import Order
 
 
 class Exchange(ABC):

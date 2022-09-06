@@ -1,7 +1,7 @@
 import json
 import requests
 from exchange import Exchange
-from order import Order
+from models import Order
 
 
 class NobitexExchange(Exchange):

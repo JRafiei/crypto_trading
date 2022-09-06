@@ -2,7 +2,7 @@ import pymongo
 from bson import ObjectId
 from time import sleep
 from nobitexexchange import NobitexExchange
-from order import Notification, Order
+from models import Notification, Order
 
 
 client = pymongo.MongoClient('localhost', 27017)

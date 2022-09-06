@@ -15,13 +15,11 @@ db = client.crypto_db
 exchange = NobitexExchange()
 
 
-@app.route('/wallets/')
 def get_wallets():
     wallets = exchange.get_wallets()
     return render_template('wallets.html', wallets=wallets)
 
 
-@app.route('/add-order', methods=["GET", "POST"])
 def add_order():
     form = OrderForm()
     form.src_currency.choices = [(c, c.upper()) for c in exchange.src_currencies]
@@ -45,7 +43,6 @@ def add_order():
     return render_template('add_order.html', form=form, result=result)
 
 
-@app.route('/add-notification', methods=["GET", "POST"])
 def add_notification():
     if request.method == "GET":
         result = session.pop('add-notif-result', None)
@@ -63,9 +60,14 @@ def add_notification():
         return redirect('/add-notification')
 
 
-@app.route('/orderbook/')
 def orderbook():
     stats = exchange.get_current_prices(dst_currency='usdt')
     print(stats['etc-usdt'])
     orders = exchange.get_orderbook('ETCUSDT')
     return render_template('orderbook.html', currency="ETC", orders=orders)
+
+
+app.add_url_rule("/wallets/", view_func=get_wallets)
+app.add_url_rule("/orderbook/", view_func=orderbook)
+app.add_url_rule("/add-notification", view_func=add_notification, methods=["GET", "POST"])
+app.add_url_rule("/add-order", view_func=add_order, methods=["GET", "POST"])
